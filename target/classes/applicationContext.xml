@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:property-placeholder location="settings.properties"/>
+
+    <bean id="classicalMusic"
+          class="ua.khshanovskyi.code.ClassicalMusic">
+    </bean>
+    <bean id="rockMusic"
+          class="ua.khshanovskyi.code.RockMusic">
+    </bean>
+    <bean id="rapMusic"
+          class="ua.khshanovskyi.code.RapMusic">
+    </bean>
+    <util:list id="musicList" list-class="java.util.ArrayList"  value-type="ua.khshanovskyi.code.Music">
+        <ref bean="rapMusic"/>
+        <ref bean="classicalMusic"/>
+        <ref bean="rockMusic"/>
+    </util:list>
+
+
+    <bean id="player"
+          class="ua.khshanovskyi.code.MusicPlayer">
+    </bean>
+    <!--  DI by constructor  -->
+    <bean id="playerWithArgs"
+          class="ua.khshanovskyi.code.MusicPlayer">
+        <constructor-arg ref="rockMusic"/>
+    </bean>
+    <!--  DI by setter  -->
+    <bean id="playerWithSetter"
+          class="ua.khshanovskyi.code.MusicPlayer">
+        <property name="music" ref="rapMusic"/>
+    </bean>
+    <!--  DI by setter for player name and volume by "value" parameter in Bean DI XML -->
+    <bean id="playerWithNameAndVolumeClassical"
+          class="ua.khshanovskyi.code.MusicPlayer">
+        <property name="playerName" value="AKG"/>
+        <property name="volume" value="50"/>
+        <property name="music" ref="classicalMusic"/>
+    </bean>
+    <!--  DI by setter for player name and volume by "value" parameter in Bean DI XML -->
+    <bean id="playerWithNameAndVolumeClassicalByProperties"
+          class="ua.khshanovskyi.code.MusicPlayer">
+        <property name="playerName" value="${player.playerName}"/>
+        <property name="volume" value="${player.volume}"/>
+        <property name="music" ref="classicalMusic"/>
+    </bean>
+    <!--  DI list of Music by setter  -->
+    <bean id="playerWithMusics"
+          class="ua.khshanovskyi.code.MusicPlayer">
+        <property name="musics" ref="musicList"/>
+    </bean>
+
+</beans>
